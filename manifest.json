@@ -1,0 +1,16 @@
+
+{
+  "short_name": "BeerFree120",
+  "name": "Beer-Free 120 Resolution Tracker",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3163/3163634.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#f8fafc",
+  "background_color": "#f8fafc"
+}
