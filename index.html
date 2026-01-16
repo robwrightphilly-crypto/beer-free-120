@@ -15,9 +15,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Safety Shim: Prevents crashes from libraries expecting Node.js variables -->
+    <!-- Pre-init safety: Define process before any scripts load -->
     <script>
-      window.process = { env: { NODE_ENV: 'production' } };
+      window.process = { 
+        env: { 
+          NODE_ENV: 'production',
+          API_KEY: '' // Will be populated by the environment if available
+        } 
+      };
     </script>
 
     <style>
@@ -27,7 +32,6 @@
           overflow-x: hidden;
           background-color: #f8fafc;
         }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
         .pt-safe { padding-top: env(safe-area-inset-top); }
 
@@ -62,8 +66,9 @@
 </head>
 <body class="bg-slate-50 text-slate-900 min-h-screen">
     <div id="root">
-        <div class="flex items-center justify-center min-h-screen text-slate-400 font-bold animate-pulse">
-            Loading Resolution Tracker...
+        <div class="flex flex-col items-center justify-center min-h-screen text-slate-400 space-y-4">
+            <div class="w-12 h-12 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin"></div>
+            <p class="font-black text-xs uppercase tracking-widest animate-pulse">Initializing Resolution Tracker...</p>
         </div>
     </div>
     <script type="module" src="./index.tsx"></script>
