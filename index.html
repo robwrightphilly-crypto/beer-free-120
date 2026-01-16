@@ -18,6 +18,7 @@
     <!-- Safety: Define system variables and Error Tracking -->
     <script>
       window.process = { env: { NODE_ENV: 'production', API_KEY: '' } };
+      window.appLoaded = false;
       
       // Global Error Catcher
       window.onerror = function(msg, url, lineNo, columnNo, error) {
@@ -39,20 +40,17 @@
 
       // Watchdog: If nothing happens in 8 seconds, warn the user
       setTimeout(() => {
-        const root = document.getElementById('root');
-        // Check if we are still showing the loader text
-        if (root && root.innerText.includes('Establishing Connection')) {
-          const troubleshooting = document.createElement('div');
-          troubleshooting.style.marginTop = '20px';
-          troubleshooting.style.color = '#64748b';
-          troubleshooting.style.fontSize = '12px';
-          troubleshooting.style.textAlign = 'center';
-          troubleshooting.className = 'animate-fade-in';
-          troubleshooting.innerHTML = `
-            <p>Taking longer than usual. Check your internet or try a fresh reload.</p>
-            <button onclick="window.location.reload()" style="margin-top: 12px; color: #6366f1; font-weight: 800; text-decoration: underline; background: none; border: none; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Force Refresh Now</button>
-          `;
-          root.querySelector('.flex-col').appendChild(troubleshooting);
+        if (!window.appLoaded) {
+          const statusText = document.getElementById('status-text');
+          if (statusText) {
+            statusText.innerHTML = `
+              <div class="animate-fade-in text-center mt-4">
+                <p class="text-rose-500 font-bold">Connection timed out.</p>
+                <p class="text-slate-400 text-[10px] mt-1">This usually means a module failed to load.</p>
+                <button onclick="window.location.reload()" class="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg">Retry Connection</button>
+              </div>
+            `;
+          }
         }
       }, 8000);
     </script>
@@ -99,12 +97,15 @@
     <div id="root">
         <div class="flex flex-col items-center justify-center min-h-screen text-slate-400 space-y-4">
             <div class="w-10 h-10 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin"></div>
-            <div class="flex flex-col items-center space-y-1">
+            <div id="status-text" class="flex flex-col items-center space-y-1">
               <p class="font-black text-[10px] uppercase tracking-[0.2em] animate-pulse text-slate-500">Establishing Connection</p>
               <p class="text-[9px] font-medium text-slate-300">Beer-Free 120 Tracker</p>
             </div>
         </div>
     </div>
-    <script type="module" src="./index.tsx"></script>
+    <script type="module">
+      import "./index.tsx";
+      window.appLoaded = true;
+    </script>
 </body>
 </html>
