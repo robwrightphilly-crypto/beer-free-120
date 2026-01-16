@@ -15,13 +15,24 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Pre-init safety: Define process before any scripts load -->
+    <!-- Safety: Define system variables and Error Tracking -->
     <script>
-      window.process = { 
-        env: { 
-          NODE_ENV: 'production',
-          API_KEY: '' // Will be populated by the environment if available
-        } 
+      window.process = { env: { NODE_ENV: 'production', API_KEY: '' } };
+      
+      // Global Error Catcher: Shows technical errors on screen if the app crashes
+      window.onerror = function(msg, url, lineNo, columnNo, error) {
+        const root = document.getElementById('root');
+        if (root) {
+          root.innerHTML = `
+            <div style="padding: 40px; color: #e11d48; font-family: sans-serif; text-align: center; background: #fff1f2; min-height: 100vh;">
+              <h2 style="font-weight: 900;">Critical Loading Error</h2>
+              <p style="font-size: 14px; opacity: 0.8; margin-top: 10px;">${msg}</p>
+              <p style="font-size: 12px; font-family: monospace; color: #991b1b; margin-top: 20px;">Line: ${lineNo}:${columnNo}</p>
+              <button onclick="window.location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #e11d48; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Refresh Page</button>
+            </div>
+          `;
+        }
+        return false;
       };
     </script>
 
@@ -32,18 +43,17 @@
           overflow-x: hidden;
           background-color: #f8fafc;
         }
+        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
         .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
         .pt-safe { padding-top: env(safe-area-inset-top); }
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes zoomIn { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
-        @keyframes pop { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
-
+        
         .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
         .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-zoom-in { animation: zoomIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
-        .animate-pop { animation: pop 0.3s ease-out forwards; }
+        .animate-spin { animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
 
         .delay-1 { animation-delay: 0.1s; opacity: 0; }
         .delay-2 { animation-delay: 0.2s; opacity: 0; }
@@ -67,8 +77,8 @@
 <body class="bg-slate-50 text-slate-900 min-h-screen">
     <div id="root">
         <div class="flex flex-col items-center justify-center min-h-screen text-slate-400 space-y-4">
-            <div class="w-12 h-12 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin"></div>
-            <p class="font-black text-xs uppercase tracking-widest animate-pulse">Initializing Resolution Tracker...</p>
+            <div class="w-10 h-10 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin"></div>
+            <p class="font-black text-[10px] uppercase tracking-[0.2em] animate-pulse">Establishing Connection...</p>
         </div>
     </div>
     <script type="module" src="./index.tsx"></script>
