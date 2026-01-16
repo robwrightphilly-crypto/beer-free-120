@@ -19,21 +19,42 @@
     <script>
       window.process = { env: { NODE_ENV: 'production', API_KEY: '' } };
       
-      // Global Error Catcher: Shows technical errors on screen if the app crashes
+      // Global Error Catcher
       window.onerror = function(msg, url, lineNo, columnNo, error) {
         const root = document.getElementById('root');
         if (root) {
           root.innerHTML = `
-            <div style="padding: 40px; color: #e11d48; font-family: sans-serif; text-align: center; background: #fff1f2; min-height: 100vh;">
-              <h2 style="font-weight: 900;">Critical Loading Error</h2>
-              <p style="font-size: 14px; opacity: 0.8; margin-top: 10px;">${msg}</p>
-              <p style="font-size: 12px; font-family: monospace; color: #991b1b; margin-top: 20px;">Line: ${lineNo}:${columnNo}</p>
-              <button onclick="window.location.reload()" style="margin-top: 20px; padding: 10px 20px; background: #e11d48; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer;">Refresh Page</button>
+            <div style="padding: 40px; color: #e11d48; font-family: sans-serif; text-align: center; background: #fff1f2; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <h2 style="font-weight: 900; font-size: 20px;">Technical Crash Detected</h2>
+              <p style="font-size: 14px; opacity: 0.8; margin-top: 10px; max-width: 400px;">${msg}</p>
+              <div style="font-size: 11px; font-family: monospace; background: #ffe4e6; padding: 10px; border-radius: 8px; margin-top: 20px; text-align: left; overflow: auto; max-width: 90vw;">
+                URL: ${url}<br>Line: ${lineNo}:${columnNo}
+              </div>
+              <button onclick="window.location.reload()" style="margin-top: 30px; padding: 12px 24px; background: #e11d48; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);">Reload Tracker</button>
             </div>
           `;
         }
         return false;
       };
+
+      // Watchdog: If nothing happens in 8 seconds, warn the user
+      setTimeout(() => {
+        const root = document.getElementById('root');
+        // Check if we are still showing the loader text
+        if (root && root.innerText.includes('Establishing Connection')) {
+          const troubleshooting = document.createElement('div');
+          troubleshooting.style.marginTop = '20px';
+          troubleshooting.style.color = '#64748b';
+          troubleshooting.style.fontSize = '12px';
+          troubleshooting.style.textAlign = 'center';
+          troubleshooting.className = 'animate-fade-in';
+          troubleshooting.innerHTML = `
+            <p>Taking longer than usual. Check your internet or try a fresh reload.</p>
+            <button onclick="window.location.reload()" style="margin-top: 12px; color: #6366f1; font-weight: 800; text-decoration: underline; background: none; border: none; cursor: pointer; font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em;">Force Refresh Now</button>
+          `;
+          root.querySelector('.flex-col').appendChild(troubleshooting);
+        }
+      }, 8000);
     </script>
 
     <style>
@@ -78,7 +99,10 @@
     <div id="root">
         <div class="flex flex-col items-center justify-center min-h-screen text-slate-400 space-y-4">
             <div class="w-10 h-10 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin"></div>
-            <p class="font-black text-[10px] uppercase tracking-[0.2em] animate-pulse">Establishing Connection...</p>
+            <div class="flex flex-col items-center space-y-1">
+              <p class="font-black text-[10px] uppercase tracking-[0.2em] animate-pulse text-slate-500">Establishing Connection</p>
+              <p class="text-[9px] font-medium text-slate-300">Beer-Free 120 Tracker</p>
+            </div>
         </div>
     </div>
     <script type="module" src="./index.tsx"></script>
