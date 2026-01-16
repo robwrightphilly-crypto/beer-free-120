@@ -15,39 +15,37 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Safety: Define system variables and Error Tracking -->
     <script>
+      // Initialize environment
       window.process = { env: { NODE_ENV: 'production', API_KEY: '' } };
       window.appLoaded = false;
       
       // Global Error Catcher
-      window.onerror = function(msg, url, lineNo, columnNo, error) {
+      window.onerror = function(msg, url, line, col, error) {
+        console.error("Critical Failure:", msg);
         const root = document.getElementById('root');
         if (root) {
           root.innerHTML = `
-            <div style="padding: 40px; color: #e11d48; font-family: sans-serif; text-align: center; background: #fff1f2; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-              <h2 style="font-weight: 900; font-size: 20px;">Technical Crash Detected</h2>
-              <p style="font-size: 14px; opacity: 0.8; margin-top: 10px; max-width: 400px;">${msg}</p>
-              <div style="font-size: 11px; font-family: monospace; background: #ffe4e6; padding: 10px; border-radius: 8px; margin-top: 20px; text-align: left; overflow: auto; max-width: 90vw;">
-                URL: ${url}<br>Line: ${lineNo}:${columnNo}
-              </div>
-              <button onclick="window.location.reload()" style="margin-top: 30px; padding: 12px 24px; background: #e11d48; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.3);">Reload Tracker</button>
+            <div style="padding: 40px; font-family: sans-serif; text-align: center; background: #fff1f2; color: #e11d48; min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+              <h1 style="font-weight: 900; font-size: 24px;">Application Error</h1>
+              <p style="margin: 10px 0; font-weight: 500;">${msg}</p>
+              <button onclick="window.location.reload()" style="background: #e11d48; color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 800; cursor: pointer; margin-top: 20px;">Try Again</button>
             </div>
           `;
         }
         return false;
       };
 
-      // Watchdog: If nothing happens in 8 seconds, warn the user
+      // Watchdog: Fired if the app bundle fails to report 'ready'
       setTimeout(() => {
         if (!window.appLoaded) {
-          const statusText = document.getElementById('status-text');
-          if (statusText) {
-            statusText.innerHTML = `
-              <div class="animate-fade-in text-center mt-4">
-                <p class="text-rose-500 font-bold">Connection timed out.</p>
-                <p class="text-slate-400 text-[10px] mt-1">This usually means a module failed to load.</p>
-                <button onclick="window.location.reload()" class="mt-4 px-4 py-2 bg-indigo-500 text-white rounded-lg text-[10px] font-black uppercase tracking-widest shadow-lg">Retry Connection</button>
+          const status = document.getElementById('status-text');
+          if (status) {
+            status.innerHTML = `
+              <div class="mt-4 p-6 bg-white rounded-3xl shadow-2xl border border-rose-100 animate-slide-up text-center max-w-xs">
+                <p class="text-rose-600 font-black text-xs uppercase tracking-widest mb-2">Connection Timeout</p>
+                <p class="text-slate-400 text-[10px] leading-relaxed mb-6">The module loader is taking longer than expected. This can happen on slow connections.</p>
+                <button onclick="window.location.reload()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg active:scale-95 transition-transform">Refresh Module</button>
               </div>
             `;
           }
@@ -56,30 +54,15 @@
     </script>
 
     <style>
-        body { 
-          font-family: 'Inter', sans-serif; 
-          -webkit-tap-highlight-color: transparent;
-          overflow-x: hidden;
-          background-color: #f8fafc;
-        }
-        .glass { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); }
-        .pb-safe { padding-bottom: env(safe-area-inset-bottom); }
-        .pt-safe { padding-top: env(safe-area-inset-top); }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .animate-fade-in { animation: fadeIn 0.6s ease-out forwards; }
-        .animate-slide-up { animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
-        .animate-spin { animation: spin 1s linear infinite; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow-x: hidden; }
+        .glass { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(20px); }
         @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-
-        .delay-1 { animation-delay: 0.1s; opacity: 0; }
-        .delay-2 { animation-delay: 0.2s; opacity: 0; }
-        .delay-3 { animation-delay: 0.3s; opacity: 0; }
+        .animate-spin { animation: spin 0.8s linear infinite; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-slide-up { animation: slideUp 0.5s ease-out forwards; }
     </style>
 
-<script type="importmap">
+    <script type="importmap">
 {
   "imports": {
     "react": "https://esm.sh/react@19.0.0",
@@ -93,19 +76,16 @@
 }
 </script>
 </head>
-<body class="bg-slate-50 text-slate-900 min-h-screen">
+<body class="text-slate-900">
     <div id="root">
-        <div class="flex flex-col items-center justify-center min-h-screen text-slate-400 space-y-4">
-            <div class="w-10 h-10 border-4 border-slate-200 border-t-indigo-500 rounded-full animate-spin"></div>
-            <div id="status-text" class="flex flex-col items-center space-y-1">
-              <p class="font-black text-[10px] uppercase tracking-[0.2em] animate-pulse text-slate-500">Establishing Connection</p>
-              <p class="text-[9px] font-medium text-slate-300">Beer-Free 120 Tracker</p>
+        <div class="flex flex-col items-center justify-center min-h-screen p-6 text-center">
+            <div class="w-12 h-12 border-4 border-slate-100 border-t-indigo-600 rounded-full animate-spin mb-6"></div>
+            <div id="status-text" class="space-y-2">
+                <p class="font-black text-[11px] uppercase tracking-[0.3em] text-slate-500 animate-pulse">Initializing Interface</p>
+                <p class="text-[10px] font-bold text-slate-300 italic">2026 Beer-Free Challenge</p>
             </div>
         </div>
     </div>
-    <script type="module">
-      import "./index.tsx";
-      window.appLoaded = true;
-    </script>
+    <script type="module" src="./index.tsx"></script>
 </body>
 </html>
