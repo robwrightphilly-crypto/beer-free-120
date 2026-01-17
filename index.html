@@ -46,7 +46,7 @@
             status.innerHTML = `
               <div class="mt-4 p-6 bg-white rounded-3xl shadow-2xl border border-rose-100 animate-slide-up text-center max-w-xs mx-auto">
                 <p class="text-rose-600 font-black text-xs uppercase tracking-widest mb-2">Connection Timeout</p>
-                <p class="text-slate-400 text-[10px] leading-relaxed mb-6">The module loader failed to resolve dependencies. Please check your network connection.</p>
+                <p class="text-slate-400 text-[10px] leading-relaxed mb-6">The module loader failed to resolve dependencies. Please check your network connection or console for 404 errors on imports.</p>
                 <button onclick="window.location.reload()" class="w-full py-4 bg-indigo-600 text-white rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-lg active:scale-95 transition-transform">Reload</button>
               </div>
             `;
@@ -62,8 +62,10 @@
     "react/jsx-runtime": "https://esm.sh/react@19.2.3/jsx-runtime",
     "react-dom": "https://esm.sh/react-dom@19.2.3",
     "react-dom/client": "https://esm.sh/react-dom@19.2.3/client",
+    "prop-types": "https://esm.sh/prop-types@15.8.1",
+    "react-is": "https://esm.sh/react-is@19.0.0-rc",
     "@google/genai": "https://esm.sh/@google/genai@0.1.1",
-    "recharts": "https://esm.sh/recharts@2.13.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.15.0?external=react,react-dom",
     "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
     "react/": "https://esm.sh/react@^19.2.3/"
   }
