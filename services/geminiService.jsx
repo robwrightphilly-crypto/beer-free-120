@@ -1,8 +1,6 @@
-
 import { GoogleGenAI } from "@google/genai";
-import { DayLog } from "../types.ts";
 
-export const getCoachAdvice = async (logs: DayLog[], userMessage: string) => {
+export const getCoachAdvice = async (logs, userMessage) => {
   // Defensive check for the API key to prevent app-wide crashes
   let apiKey = '';
   try {

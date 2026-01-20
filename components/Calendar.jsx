@@ -1,24 +1,24 @@
-
 import React, { useState } from 'react';
-import { GOAL_YEAR, MONTHS, DAYS_OF_WEEK } from '../constants';
-import { DayLog } from '../types';
 
-interface CalendarProps {
-  logs: DayLog[];
-  onToggleDay: (date: string) => void;
-}
+// Constants
+const GOAL_YEAR = 2026;
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
+const DAYS_OF_WEEK = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-const Calendar: React.FC<CalendarProps> = ({ logs, onToggleDay }) => {
+const Calendar = ({ logs, onToggleDay }) => {
   // Initialize to current month if we are in 2026, otherwise start at January
   const now = new Date();
   const initialMonth = now.getFullYear() === GOAL_YEAR ? now.getMonth() : 0;
   const [currentMonth, setCurrentMonth] = useState(initialMonth);
 
-  const getDaysInMonth = (month: number, year: number) => {
+  const getDaysInMonth = (month, year) => {
     return new Date(year, month + 1, 0).getDate();
   };
 
-  const getFirstDayOfMonth = (month: number, year: number) => {
+  const getFirstDayOfMonth = (month, year) => {
     return new Date(year, month, 1).getDay();
   };
 
@@ -27,12 +27,12 @@ const Calendar: React.FC<CalendarProps> = ({ logs, onToggleDay }) => {
   const blanks = Array(firstDay).fill(null);
   const daysArray = Array.from({ length: days }, (_, i) => i + 1);
 
-  const isNoBeer = (day: number) => {
+  const isNoBeer = (day) => {
     const dateStr = `${GOAL_YEAR}-${String(currentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     return logs.find(l => l.date === dateStr)?.isNoBeerDay;
   };
 
-  const isFutureDate = (day: number) => {
+  const isFutureDate = (day) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0); // Start of today
     const cellDate = new Date(GOAL_YEAR, currentMonth, day);

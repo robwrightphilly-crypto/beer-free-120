@@ -1,9 +1,9 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App.tsx';
+import App from './App.jsx';
 
 // Immediately notify the window that we've started executing the main bundle
-(window as any).appLoaded = true;
+window.appLoaded = true;
 console.log("🚀 Application Module Started Successfully");
 
 const container = document.getElementById('root');

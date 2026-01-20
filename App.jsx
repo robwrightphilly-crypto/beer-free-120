@@ -1,17 +1,26 @@
-
 import React, { useState, useEffect, useMemo } from 'react';
-import { DayLog, ViewMode } from './types';
-import { STORAGE_KEY, TARGET_DAYS, GOAL_YEAR } from './constants';
-import Calendar from './components/Calendar';
-import StatsCard from './components/StatsCard';
-import ProgressChart from './components/ProgressChart';
-import { getCoachAdvice } from './services/geminiService';
+import Calendar from './components/Calendar.jsx';
+import StatsCard from './components/StatsCard.jsx';
+import ProgressChart from './components/ProgressChart.jsx';
+import { getCoachAdvice } from './services/geminiService.jsx';
 
-const App: React.FC = () => {
-  const [logs, setLogs] = useState<DayLog[]>([]);
-  const [viewMode, setViewMode] = useState<ViewMode>(ViewMode.DASHBOARD);
+// Constants
+const STORAGE_KEY = 'beer-free-120-logs';
+const TARGET_DAYS = 120;
+const GOAL_YEAR = 2026;
+
+// ViewMode enum replacement
+const ViewMode = {
+  DASHBOARD: 'DASHBOARD',
+  CALENDAR: 'CALENDAR',
+  COACH: 'COACH'
+};
+
+const App = () => {
+  const [logs, setLogs] = useState([]);
+  const [viewMode, setViewMode] = useState(ViewMode.DASHBOARD);
   const [chatMessage, setChatMessage] = useState('');
-  const [chatHistory, setChatHistory] = useState<{ role: 'user' | 'ai', text: string }[]>([]);
+  const [chatHistory, setChatHistory] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
 
   useEffect(() => {
@@ -29,7 +38,7 @@ const App: React.FC = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(logs));
   }, [logs]);
 
-  const toggleDay = (date: string) => {
+  const toggleDay = (date) => {
     setLogs(prev => {
       const existing = prev.find(l => l.date === date);
       if (existing) {
@@ -48,7 +57,7 @@ const App: React.FC = () => {
     
     if (sortedLogs.length > 0) {
       streak = 0;
-      let lastDate: Date | null = null;
+      let lastDate = null;
       for (const log of sortedLogs) {
         const d = new Date(log.date);
         if (!lastDate) {

@@ -1,15 +1,6 @@
-
 import React from 'react';
 
-interface StatsCardProps {
-  label: string;
-  value: string | number;
-  subValue?: string;
-  icon: React.ReactNode;
-  colorClass: string;
-}
-
-const StatsCard: React.FC<StatsCardProps> = ({ label, value, subValue, icon, colorClass }) => {
+const StatsCard = ({ label, value, subValue, icon, colorClass }) => {
   return (
     <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 flex items-start space-x-4">
       <div className={`p-3 rounded-xl ${colorClass} bg-opacity-10 text-opacity-100`}>

@@ -1,14 +1,14 @@
-
 import React from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { DayLog } from '../types';
-import { MONTHS, GOAL_YEAR } from '../constants';
 
-interface ProgressChartProps {
-  logs: DayLog[];
-}
+// Constants
+const GOAL_YEAR = 2026;
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+];
 
-const ProgressChart: React.FC<ProgressChartProps> = ({ logs }) => {
+const ProgressChart = ({ logs }) => {
   const data = MONTHS.map((month, index) => {
     const monthStr = String(index + 1).padStart(2, '0');
     const count = logs.filter(l => l.date.startsWith(`${GOAL_YEAR}-${monthStr}`) && l.isNoBeerDay).length;
