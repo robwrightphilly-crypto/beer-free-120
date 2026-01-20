@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import Calendar from './components/Calendar.jsx';
-import StatsCard from './components/StatsCard.jsx';
-import ProgressChart from './components/ProgressChart.jsx';
-import { getCoachAdvice } from './services/geminiService.jsx';
+import Calendar from './components/Calendar.js';
+import StatsCard from './components/StatsCard.js';
+import ProgressChart from './components/ProgressChart.js';
+import { getCoachAdvice } from './services/geminiService.js';
 
 // Constants
 const STORAGE_KEY = 'beer-free-120-logs';
