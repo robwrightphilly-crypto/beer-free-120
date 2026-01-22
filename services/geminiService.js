@@ -4,13 +4,13 @@ export const getCoachAdvice = async (logs, userMessage) => {
   // Defensive check for the API key to prevent app-wide crashes
   let apiKey = '';
   try {
-    apiKey = (typeof process !== 'undefined' && process.env?.API_KEY) || '';
+    apiKey = import.meta.env.VITE_API_KEY || '';
   } catch (e) {
-    console.warn("Could not access process.env", e);
+    console.warn("Could not access environment variables", e);
   }
 
   if (!apiKey) {
-    return "I'm currently in 'offline mode' because the API Key isn't set up yet. Please follow the instructions to add your API_KEY to Vercel!";
+    return "I'm currently in 'offline mode' because the API Key isn't set up yet. To enable AI coaching, add your VITE_API_KEY environment variable in Vercel settings.";
   }
 
   const genAI = new GoogleGenerativeAI(apiKey);
@@ -20,13 +20,15 @@ export const getCoachAdvice = async (logs, userMessage) => {
   const target = 120;
   
   const systemPrompt = `You are a supportive health coach for the "Beer-Free 120" challenge in 2026.
-  Goal: 120 days of no beer.
-  Current progress: ${completedCount}/${target} days.
-  Tone: Encouraging, practical, firm.
-  Keep responses under 100 words.`;
+Goal: 120 days of no beer.
+Current progress: ${completedCount}/${target} days.
+Tone: Encouraging, practical, firm.
+Keep responses under 100 words.
+
+User: ${userMessage}`;
 
   try {
-    const result = await model.generateContent(systemPrompt + "\n\nUser: " + userMessage);
+    const result = await model.generateContent(systemPrompt);
     const response = await result.response;
     return response.text() || "I'm here for you! Stay strong.";
   } catch (error) {
