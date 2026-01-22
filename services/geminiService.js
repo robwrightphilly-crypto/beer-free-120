@@ -1,4 +1,4 @@
-import { GoogleGenAI } from "@google/genai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
 export const getCoachAdvice = async (logs, userMessage) => {
   // Defensive check for the API key to prevent app-wide crashes
